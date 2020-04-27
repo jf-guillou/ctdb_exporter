@@ -1,8 +1,6 @@
-# .github/workflows/reviewdog.yaml
+name: Lint on PR
+on: [pull_request]
 
-name: reviewdog
-on:
-  - pull_request
 jobs:
   golangci-lint:
     name: runner / golangci-lint
