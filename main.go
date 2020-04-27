@@ -65,15 +65,22 @@ func NewCollector() *StatusCollector {
 }
 
 func (c *StatusCollector) Collect(ch chan<- prometheus.Metric) {
-	mn, err := isMasterNode(runCmd)
-	if err != nil || !mn {
-		// FIXME: Shouldn't silence errors here
+	masterNode, err := isMasterNode(runCmd)
+	if err != nil {
+		ch <- prometheus.MustNewConstMetric(c.up, prometheus.GaugeValue, 0)
+		log.Println(err)
+		return
+	}
+
+	if !masterNode {
+		// TODO: We probably don't need to scrape shared status on every node
 		return
 	}
 
 	status, err := scrapeStatus(runCmd)
 	if err != nil {
-		// FIXME: Shouldn't silence errors here
+		ch <- prometheus.MustNewConstMetric(c.up, prometheus.GaugeValue, 0)
+		log.Println(err)
 		return
 	}
 
