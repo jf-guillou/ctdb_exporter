@@ -25,7 +25,7 @@ This tool is most likely going to need sudo as default CTDB configuration locks 
 Assuming you are running the exporter with the user `prometheus`,
 the easiest way to handle this would be creating a `/etc/sudoers.d/ctdb_exporter` file containing :
 ```
-prometheus ALL=(ALL) NOPASSWD: /usr/bin/ctdb pnn,/usr/bin/ctdb recmaster,/usr/bin/ctdb status -Y
+prometheus ALL=(ALL) NOPASSWD: /usr/bin/ctdb pnn,/usr/bin/ctdb recmaster,/usr/bin/ctdb status -Y,/usr/bin/ctdb statistics -Y
 ```
 
 ## Prometheus configuration
@@ -43,18 +43,19 @@ scrape_configs:
 
 ## Exposed metrics
 
-As of v0.1.0, only the master node will return meaningful `ctdb_` info.
+`ctdb_up` will return 0 on scrape errors.
 
-`ctdb_up` will return 0 on scrape errors (even if the node is not master as the tool needs basic scraping to determine who is master node).
-
-The results of `ctdb status -Y` will be returned as gauges.
+The results of `ctdb status -Y` on master node and `ctdb statistics -Y` on all nodes will be returned as gauges.
 
 Example metrics :
 ```
+ctdb_up 1
+...
 ctdb_banned{id="1",ip="0.0.0.1"} 0
 ctdb_banned{id="2",ip="0.0.0.2"} 0
 ctdb_disconnected{id="1",ip="0.0.0.1"} 0
 ctdb_disconnected{id="2",ip="0.0.0.2"} 0
 ...
-ctdb_up 1
+ctdb_num_clients{id="1"} 12
+ctdb_num_clients{id="2"} 21
 ```
