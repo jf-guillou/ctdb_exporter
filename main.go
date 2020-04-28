@@ -17,7 +17,7 @@ const (
 )
 
 var (
-	addr     = flag.String("web.listen-address", ":9725", "The address to listen on for HTTP requests.")
+	addr     = flag.String("web.listen-address", ":9727", "The address to listen on for HTTP requests.")
 	endpoint = flag.String("web.endpoint", "/metrics", "Path under which to expose metrics.")
 	ctdbBin  = flag.String("ctdb.bin-path", "/usr/bin/ctdb", "Full path to CTDB binary.")
 	ctdbSudo = flag.Bool("ctdb.sudo", true, "Prefix ctdb commands with sudo.")
