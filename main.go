@@ -21,8 +21,9 @@ var (
 	endpoint = flag.String("web.endpoint", "/metrics", "Path under which to expose metrics.")
 	ctdbBin  = flag.String("ctdb.bin-path", "/usr/bin/ctdb", "Full path to CTDB binary.")
 	ctdbSudo = flag.Bool("ctdb.sudo", true, "Prefix ctdb commands with sudo.")
+	pnn = ""
+	recmaster = ""
 )
-
 
 type runner func(...string) (string, error)
 
@@ -42,12 +43,13 @@ func runCmd(arg ...string) (string, error) {
 }
 
 func isMasterNode(run runner) (bool, error) {
-	pnn, err := run("pnn")
+	var err error
+	pnn, err = run("pnn")
 	if err != nil {
 		return false, err
 	}
 
-	recmaster, err := run("recmaster")
+	recmaster, err = run("recmaster")
 	if err != nil {
 		return false, err
 	}
