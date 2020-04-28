@@ -61,6 +61,7 @@ func main() {
 	flag.Parse()
 
 	prometheus.MustRegister(NewStatusCollector())
+	prometheus.MustRegister(NewStatisticsCollector())
 
 	http.Handle(*endpoint, promhttp.Handler())
 	log.Fatal(http.ListenAndServe(*addr, nil))
