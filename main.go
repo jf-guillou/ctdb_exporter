@@ -19,6 +19,7 @@ const (
 var (
 	addr     = flag.String("web.listen-address", ":9725", "The address to listen on for HTTP requests.")
 	endpoint = flag.String("web.endpoint", "/metrics", "Path under which to expose metrics.")
+	ctdbSudo = flag.Bool("ctdb.sudo", true, "Prefix ctdb commands with sudo.")
 	ctdbBin  = flag.String("ctdb.binpath", "/usr/bin/ctdb", "Full path to CTDB binary.")
 )
 
@@ -109,12 +110,18 @@ func (c *StatusCollector) Describe(ch chan<- *prometheus.Desc) {
 type runner func(...string) (string, error)
 
 func runCmd(arg ...string) (string, error) {
-	result, err := exec.Command(*ctdbBin, arg...).Output()
+	cmd := exec.Command(*ctdbBin, arg...)
+	if *ctdbSudo {
+		// This monstrosity of a command tries to run /bin/sh -c /usr/bin/sudo /usr/bin/ctdb with proper escaping
+		cmd = exec.Command("/bin/sh", append([]string{"-c"},
+			strings.Join(append([]string{"/usr/bin/sudo", *ctdbBin}, arg...), " "))...)
+	}
+	result, err := cmd.CombinedOutput()
 	if err != nil {
-		return "", fmt.Errorf("command %v %v failed with err : %v", *ctdbBin, arg, err)
+		return "", fmt.Errorf("command '%v' failed with err : %v (%v)", cmd.String(), err, strings.TrimSpace(string(result)))
 	}
 
-	return string(result), nil
+	return strings.TrimSpace(string(result)), nil
 }
 
 func isMasterNode(run runner) (bool, error) {
