@@ -1,8 +1,8 @@
 package main
 
 import (
-"fmt"
-"testing"
+	"fmt"
+	"testing"
 )
 
 func testCommandRunner(arg ...string) (string, error) {

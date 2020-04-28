@@ -8,11 +8,11 @@ import (
 )
 
 type Statistics struct {
-	numClients              float64
+	numClients float64
 }
 
 type StatisticsCollector struct {
-	numClients              *prometheus.Desc
+	numClients *prometheus.Desc
 }
 
 func NewStatisticsCollector() *StatisticsCollector {
@@ -59,7 +59,9 @@ func scrapeStatistics(run runner) (*Statistics, error) {
 		switch headers[field] {
 		case "num_clients":
 			numClients, err := strconv.Atoi(val)
-			if err != nil { continue }
+			if err != nil {
+				continue
+			}
 			statistics.numClients = float64(numClients)
 		}
 	}
