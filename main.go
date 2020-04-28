@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"os/exec"
@@ -110,7 +111,7 @@ type runner func(...string) (string, error)
 func runCmd(arg ...string) (string, error) {
 	result, err := exec.Command(*ctdbBin, arg...).Output()
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("command %v %v failed with err : %v", *ctdbBin, arg, err)
 	}
 
 	return string(result), nil

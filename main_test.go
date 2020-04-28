@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"testing"
 )
@@ -16,7 +15,7 @@ func testCommandRunner(arg ...string) (string, error) {
 		return "|Node|IP|Disconnected|Banned|Disabled|Unhealthy|Stopped|Inactive|PartiallyOnline|ThisNode|\n|0|0.0.0.1|0|0|0|0|0|0|1|Y|", nil
 	}
 
-	return "", errors.New(fmt.Sprintf("unexpected command : %s", arg[0]))
+	return "", fmt.Errorf("unexpected command : %v", arg)
 }
 
 func TestIsMasterNode(t *testing.T) {
@@ -26,7 +25,7 @@ func TestIsMasterNode(t *testing.T) {
 	}
 
 	if !mn {
-		t.Error(fmt.Sprintf("expected true but got %v", mn))
+		t.Error(fmt.Errorf("expected true but got %v", mn))
 	}
 }
 
@@ -37,7 +36,7 @@ func TestScrapeStatus(t *testing.T) {
 	}
 
 	if status == nil {
-		t.Error("expected something but got nothing")
+		t.Error("expected scrapeStatus to return something but got nothing")
 	}
 
 	expectedOutput := Status{
@@ -45,6 +44,6 @@ func TestScrapeStatus(t *testing.T) {
 	}
 
 	if status[0] != expectedOutput {
-		t.Error("expected status to be correctly parsed")
+		t.Error("expected scraped status to be correctly parsed")
 	}
 }
