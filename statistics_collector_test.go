@@ -25,7 +25,19 @@ func TestScrapeStatistics(t *testing.T) {
 	}
 
 	expectedOutput := Statistics{
-		46,
+		numClients:         46,
+		numRecoveries:      5,
+		clientPacketsSent:  400051,
+		clientPacketsRecv:  459095,
+		maxHopCount:        2,
+		numCallLatency:     154808,
+		minCallLatency:     0.000004,
+		avgCallLatency:     0.001244,
+		maxCallLatency:     0.438651,
+		numLockwaitLatency: 905,
+		minLockwaitLatency: 0.002878,
+		avgLockwaitLatency: 0.004589,
+		maxLockwaitLatency: 0.036985,
 	}
 
 	if *statistics != expectedOutput {

@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/prometheus/client_golang/prometheus"
 	"log"
 	"strings"
+
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 type Status struct {

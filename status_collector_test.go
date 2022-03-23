@@ -25,7 +25,16 @@ func TestScrapeStatus(t *testing.T) {
 	}
 
 	expectedOutput := Status{
-		"0", "0.0.0.1", 0, 0, 0, 0, 0, 0, 1, 1,
+		id:              "0",
+		ip:              "0.0.0.1",
+		disconnected:    0,
+		banned:          0,
+		disabled:        0,
+		unhealthy:       0,
+		stopped:         0,
+		inactive:        0,
+		partiallyOnline: 1,
+		thisNode:        1,
 	}
 
 	if status[0] != expectedOutput {
