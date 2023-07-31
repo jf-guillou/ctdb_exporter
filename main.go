@@ -22,7 +22,7 @@ var (
 	ctdbBin   = flag.String("ctdb.bin-path", "/usr/bin/ctdb", "Full path to CTDB binary.")
 	ctdbSudo  = flag.Bool("ctdb.sudo", true, "Prefix ctdb commands with sudo.")
 	pnn       = ""
-	recmaster = ""
+	leader    = ""
 )
 
 type runner func(...string) (string, error)
