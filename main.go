@@ -49,12 +49,17 @@ func isMasterNode(run runner) (bool, error) {
 		return false, err
 	}
 
-	recmaster, err = run("recmaster")
+	// Newer CTDB versions have renamed recmaster to leader
+	leader, err = run("leader")
 	if err != nil {
-		return false, err
+		// Keep compatibility with older versions
+		leader, err = run("recmaster")
+		if err != nil {
+			return false, err
+		}
 	}
 
-	return pnn == recmaster, nil
+	return pnn == leader, nil
 }
 
 func main() {
